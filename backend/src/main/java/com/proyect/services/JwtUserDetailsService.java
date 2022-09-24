@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class JwtUserDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
+
     private PasswordEncoder bcryptEncoder;
 
     public JwtUserDetailsService(@Autowired UserRepository userRepository, @Autowired PasswordEncoder bcryptEncoder) {
