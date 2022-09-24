@@ -1,8 +1,6 @@
 package com.proyect.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -19,7 +17,7 @@ public class UserModel {
     private long id;
 
     @Column
-    private String username;
+    private String user;
 
     @Column
     private String password;

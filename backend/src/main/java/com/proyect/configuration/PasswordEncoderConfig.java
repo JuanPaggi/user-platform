@@ -1,4 +1,4 @@
-package com.proyect.config;
+package com.proyect.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class PasswordEncoderConfig {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public PasswordEncoderConfig(@Lazy UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;

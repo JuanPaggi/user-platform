@@ -1,6 +1,6 @@
-package com.proyect.config;
+package com.proyect.configuration;
 
-import com.proyect.services.JwtUserDetailsService;
+import com.proyect.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +19,11 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtService jwtUserDetailsService;
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtRequestFilter(@Autowired JwtUserDetailsService jwtUserDetailsService, @Autowired JwtTokenUtil jwtTokenUtil) {
+    public JwtRequestFilter(@Autowired JwtService jwtUserDetailsService, @Autowired JwtTokenUtil jwtTokenUtil) {
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
     }

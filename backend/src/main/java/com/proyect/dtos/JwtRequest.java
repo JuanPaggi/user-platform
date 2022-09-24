@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -14,8 +15,11 @@ import java.io.Serializable;
 public class JwtRequest implements Serializable {
 
 	private static final long serialVersionUID = 5926468583005150707L;
-	
+
+	@NotNull
 	private String user;
+
+	@NotNull
 	private String password;
 
 }
