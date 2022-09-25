@@ -1,12 +1,17 @@
 package com.proyect.controllers;
 
+import com.proyect.dtos.EditUserRole;
 import com.proyect.dtos.ResponseDto;
+import com.proyect.dtos.RoleDto;
 import com.proyect.dtos.UserDto;
 import com.proyect.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -18,15 +23,34 @@ public class UserController {
         this.userServices = userServices;
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> firstPage() {
-        return ResponseEntity.ok("Hello World");
+    @GetMapping()
+    public ResponseEntity<UserDto> getUser() {
+        return ResponseEntity.ok(userServices.getUser());
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN','ROLE_ADMIN')")
+    public ResponseEntity<List<UserDto>> getUsers() {
+        return ResponseEntity.ok(userServices.getUsers());
     }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> saveUser(@Validated @RequestBody UserDto user) {
         userServices.save(user);
         return ResponseEntity.ok(ResponseDto.getInstanceOk());
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    @PutMapping("/editUserRole")
+    public ResponseEntity<ResponseDto> editUserRole(@Validated @RequestBody EditUserRole body) {
+        userServices.editRole(body.getIdUser(), body.getRol());
+        return ResponseEntity.ok(ResponseDto.getInstanceOk());
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN')")
+    @GetMapping("/roles")
+    public ResponseEntity<List<RoleDto>> getRoles() {
+        return ResponseEntity.ok(userServices.getRoles());
     }
 
 }
