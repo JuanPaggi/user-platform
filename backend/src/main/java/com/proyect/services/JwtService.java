@@ -1,8 +1,8 @@
 package com.proyect.services;
 
+import com.proyect.exceptions.ApiException;
 import com.proyect.models.PrivilegeModel;
 import com.proyect.models.RoleModel;
-import com.proyect.repository.RoleRepository;
 import com.proyect.repository.UserRepository;
 import com.proyect.models.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,18 +22,15 @@ public class JwtService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
-    public JwtService(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
+    public JwtService(@Autowired UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String user) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String user) {
         UserModel userModel = userRepository.findByUser(user);
         if (userModel == null) {
-            throw new UsernameNotFoundException("User not found with username: " + user);
+            throw new ApiException(401, "User not found with username: " + user);
         }
         return new User(userModel.getUser(), userModel.getPassword(), true, true, true, true,
                 getAuthorities(userModel.getRoles()));
