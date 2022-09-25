@@ -20,6 +20,9 @@ public class RoleModel {
     @Column(unique = true)
     private String role;
 
+    @Column
+    private boolean main;
+
     @ManyToMany(mappedBy = "roles")
     private Collection<UserModel> users;
 

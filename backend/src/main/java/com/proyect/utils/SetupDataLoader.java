@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/**
+ * This class is responsible for generating the roles and privileges
+ * in the database in case they do not exist.
+ */
+
 @Component
 public class SetupDataLoader implements
         ApplicationListener<ContextRefreshedEvent> {

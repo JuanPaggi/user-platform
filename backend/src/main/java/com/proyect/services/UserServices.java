@@ -17,10 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServices {
@@ -56,6 +53,11 @@ public class UserServices {
         newUser.setUser(user.getUser());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setRoles(Collections.singletonList(rolRepository.findByRole(Roles.ROLE_USER.name())));
+        newUser.setEnable(true);
+        newUser.setLocked(false);
+        newUser.setMailVerify(false);
+        newUser.setCreateDate(new Date());
+        newUser.setUpdateDate(new Date());
         try {
             userRepository.save(newUser);
         } catch (DataIntegrityViolationException e) {
@@ -86,12 +88,50 @@ public class UserServices {
         user.setName(it.getName());
         user.setLastName(it.getLastName());
         user.setEmail(it.getEmail());
+        user.setCreateDate(it.getCreateDate());
+        user.setUpdateDate(it.getUpdateDate());
+        user.setEnable(it.isEnable());
+        user.setLocked(it.isLocked());
+        user.setMailVerify(it.isMailVerify());
         it.getRoles().forEach(
                 it2 -> it2.getPrivileges().forEach(
                         it3 -> user.getPrivileges().add(it3.getPrivilege())
                 )
         );
         return user;
+    }
+
+    public void editDataUser(UserDto user){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        authenticate(userDetails.getUsername(), user.getPassword());
+
+        UserModel userDB = userRepository.findByUser(userDetails.getUsername());
+        if (userDB == null) {
+            throw new ApiException(404, "User not found.");
+        }
+        if (user.getName() != null){
+            userDB.setName(user.getName());
+        }
+        if (user.getLastName() != null){
+            userDB.setLastName(user.getLastName());
+        }
+        if (user.getUser() != null){
+            userDB.setUser(user.getUser());
+        }
+        if (user.getEmail() != null){
+            userDB.setEmail(user.getEmail());
+            userDB.setMailVerify(false);
+        }
+        userRepository.save(userDB);
+    }
+
+    public void changePasswordWithLogin(String lastPassword, String newPassword){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        authenticate(userDetails.getUsername(), lastPassword);
+
+        UserModel userDB = userRepository.findByUser(userDetails.getUsername());
+        userDB.setPassword(bcryptEncoder.encode(newPassword));
+        userRepository.save(userDB);
     }
 
     public void editRole(Integer idUserEdit, String newRol) {

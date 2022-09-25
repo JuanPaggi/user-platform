@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,21 @@ public class UserModel {
 
     @Column
     private String password;
+
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Column(name = "update_date")
+    private Date updateDate;
+
+    @Column
+    private boolean enable;
+
+    @Column
+    private boolean locked;
+
+    @Column(name = "mail_verify")
+    private boolean mailVerify;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",

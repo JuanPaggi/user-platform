@@ -1,9 +1,6 @@
 package com.proyect.controllers;
 
-import com.proyect.dtos.EditUserRole;
-import com.proyect.dtos.ResponseDto;
-import com.proyect.dtos.RoleDto;
-import com.proyect.dtos.UserDto;
+import com.proyect.dtos.*;
 import com.proyect.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +34,18 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> saveUser(@Validated @RequestBody UserDto user) {
         userServices.save(user);
+        return ResponseEntity.ok(ResponseDto.getInstanceOk());
+    }
+
+    @PutMapping("/changePassword/withLogin")
+    public ResponseEntity<ResponseDto> changePasswordWithLogin(@Validated @RequestBody ChangePasswordDto body) {
+        userServices.changePasswordWithLogin(body.getLastPassword(), body.getNewPassword());
+        return ResponseEntity.ok(ResponseDto.getInstanceOk());
+    }
+
+    @PutMapping("/editDataUser")
+    public ResponseEntity<ResponseDto> editDataUser(@Validated @RequestBody UserDto body) {
+        userServices.editDataUser(body);
         return ResponseEntity.ok(ResponseDto.getInstanceOk());
     }
 

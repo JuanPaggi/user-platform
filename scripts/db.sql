@@ -1,15 +1,27 @@
+DROP TABLE `roles_privileges`;
+DROP TABLE `users_roles`;
+DROP TABLE `users`;
+DROP TABLE `privileges`;
+DROP TABLE `roles`;
+
 CREATE TABLE `users` (
     `id_user` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(100) UNIQUE NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `last_name` VARCHAR(50) NOT NULL,
     `user` VARCHAR(20) UNIQUE NOT NULL,
-    `password` VARCHAR(100) NOT NULL
+    `password` VARCHAR(100) NOT NULL,
+    `create_date` datetime NOT NULL,
+    `update_date` datetime NOT NULL,
+    `enable` bit NOT NULL DEFAULT 1,
+    `locked` bit NOT NULL DEFAULT 0,
+    `mail_verify` bit NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `roles` (
     `id_role` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `role` VARCHAR(100) UNIQUE NOT NULL
+    `role` VARCHAR(100) UNIQUE NOT NULL,
+    `main` bit NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `privileges` (
